@@ -1,3 +1,6 @@
 .characterCount {
     position: unset;
 }
+.editCharacterCount {
+    position: relative;
+}
