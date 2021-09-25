@@ -1,6 +1,9 @@
-.characterCount {
-    position: unset;
+.CC-Container {
+    position: initial;
 }
-.editCharacterCount {
+.CC-Count {
+    position: absolute;
+}
+.CC-EditCount {
     position: relative;
 }
