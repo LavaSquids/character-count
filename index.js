@@ -6,7 +6,7 @@ import { getModule } from '@vizality/webpack';
 
 const { characterCount, error, flairContainer } = getModule('characterCount', 'upsell');
 
-export default class extends Plugin {
+export default class CharacterCount extends Plugin {
   start () {
     this.injectStyles('./style.css');
     this.patch();
