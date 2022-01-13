@@ -13,7 +13,7 @@ export default class CharacterCount extends Plugin {
   }
 
   patch () {
-    patch(getModule(m => m.default?.displayName === 'SlateCharacterCount'), 'default', (args, res) => {
+    patch(getModule(m => m.default?.displayName === 'SlateCharacterCount'), 'default', args => {
       const { currentLength, maxCharacterCount } = args[0];
 
       const className = currentLength > maxCharacterCount ? `${characterCount} ${error} CC-Container` : `${characterCount} CC-Container`;
