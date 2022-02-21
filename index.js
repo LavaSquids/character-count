@@ -1,8 +1,10 @@
 import React from 'react';
 import { Plugin } from '@vizality/entities';
 import { patch } from '@vizality/patcher';
-const { user, constants: { Constants } } = require('@vizality/discord');
 import { getModule } from '@vizality/webpack';
+
+const Constants = getModule(m => m.API_HOST);
+const { getCurrentUser } = getModule(m => m.getCurrentUser && m.getUser);
 
 const { characterCount, error, flairContainer } = getModule('characterCount', 'upsell');
 
@@ -25,8 +27,7 @@ export default class CharacterCount extends Plugin {
       const { children } = res.props;
 
       const CurrentLength = children[0].props.textValue.length;
-      const MaxMessageLength = user.getCurrentUser().premiumType === 2 ? Constants.MAX_MESSAGE_LENGTH_PREMIUM : Constants.MAX_MESSAGE_LENGTH;
-
+      const MaxMessageLength = getCurrentUser().premiumType === 2 ? Constants.MAX_MESSAGE_LENGTH_PREMIUM : Constants.MAX_MESSAGE_LENGTH;
       const className = CurrentLength > MaxMessageLength ? `${characterCount} ${error} CC-EditCount` : `${characterCount} CC-EditCount`;
 
       children.push(<div className={className}><div className={flairContainer}>{`${CurrentLength}/${MaxMessageLength}`}</div></div>);
