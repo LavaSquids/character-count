@@ -4,6 +4,7 @@ import { patch } from '@vizality/patcher';
 import { getModule } from '@vizality/webpack';
 
 const Constants = getModule(m => m.API_HOST);
+const { canUseIncreasedMessageLength } = getModule(m => m.canUseIncreasedMessageLength);
 const { getCurrentUser } = getModule(m => m.getCurrentUser && m.getUser);
 
 const { characterCount, error, flairContainer } = getModule('characterCount', 'upsell');
@@ -16,23 +17,12 @@ export default class CharacterCount extends Plugin {
 
   patch () {
     patch(getModule(m => m.default?.displayName === 'SlateCharacterCount'), 'default', args => {
-      const { currentLength, maxCharacterCount } = args[0];
+      const { currentLength } = args[0];
+      const maxCharacterCount = canUseIncreasedMessageLength(getCurrentUser()) ? Constants.MAX_MESSAGE_LENGTH_PREMIUM : Constants.MAX_MESSAGE_LENGTH;
 
       const className = currentLength > maxCharacterCount ? `${characterCount} ${error} CC-Container` : `${characterCount} CC-Container`;
 
       return <div className={className}><div className={`${flairContainer} CC-Count`}>{`${currentLength}/${maxCharacterCount}`}</div></div>;
-    });
-
-    patch(getModule(m => m.displayName === 'MessageEditor').prototype, 'render', (args, res) => {
-      const { children } = res.props;
-
-      const CurrentLength = children[0].props.textValue.length;
-      const MaxMessageLength = getCurrentUser().premiumType === 2 ? Constants.MAX_MESSAGE_LENGTH_PREMIUM : Constants.MAX_MESSAGE_LENGTH;
-      const className = CurrentLength > MaxMessageLength ? `${characterCount} ${error} CC-EditCount` : `${characterCount} CC-EditCount`;
-
-      children.push(<div className={className}><div className={flairContainer}>{`${CurrentLength}/${MaxMessageLength}`}</div></div>);
-
-      return res;
     });
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "Character Count",
   "description": "Adds a character count",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "LavaSquid",
   "license": "MIT"
 }
