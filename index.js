@@ -17,12 +17,13 @@ export default class CharacterCount extends Plugin {
 
   patch () {
     patch(getModule(m => m.default?.displayName === 'SlateCharacterCount'), 'default', args => {
-      const { currentLength } = args[0];
+      const { textValue } = args[0];
+      const currentCharacterCount = textValue.length;
       const maxCharacterCount = canUseIncreasedMessageLength(getCurrentUser()) ? Constants.MAX_MESSAGE_LENGTH_PREMIUM : Constants.MAX_MESSAGE_LENGTH;
 
-      const className = currentLength > maxCharacterCount ? `${characterCount} ${error} CC-Container` : `${characterCount} CC-Container`;
+      const className = currentCharacterCount > maxCharacterCount ? `${characterCount} ${error} CC-Container` : `${characterCount} CC-Container`;
 
-      return <div className={className}><div className={`${flairContainer} CC-Count`}>{`${currentLength}/${maxCharacterCount}`}</div></div>;
+      return <div className={className}><div className={`${flairContainer} CC-Count`}>{`${currentCharacterCount}/${maxCharacterCount}`}</div></div>;
     });
   }
 }
